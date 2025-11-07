@@ -20,10 +20,14 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
-# project_root/urls.py
-from django.urls import path, include
+# relationship_app/urls.py
+from django.urls import path
+from . import views
 
 urlpatterns = [
-    # ... other routes ...
-    path('relationship_app/', include('relationship_app.urls')),
+    # FBV route
+    path('books/', views.list_books, name='list_books'),
+    
+    # CBV route: detail view of library; expects a pk or slug; using pk here
+    path('library/<int:pk>/', views.LibraryDetailView.as_view(), name='library_detail'),
 ]
