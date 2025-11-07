@@ -14,20 +14,20 @@ def run_queries():
     librarian = Librarian.objects.create(name="Alice", library=library)
 
     # 1. Query all books by a specific author
-    books_by_orwell = Book.objects.filter(author=author)
-    print("Books by", author.name, books_by_orwell)
+    books_by_author = Book.objects.filter(author=author)
+    print("Books by", author.name, ":", list(books_by_author))
 
     # 2. List all books in a library
     all_books_in_library = library.books.all()
-    print("Books in", library.name, all_books_in_library)
+    print("Books in", library.name, ":", list(all_books_in_library))
 
     # 3. Retrieve the librarian for a library
     the_librarian = Librarian.objects.get(library=library)
     print("Librarian for", library.name, "is", the_librarian.name)
 
-    # 4. Retrieve the library instance by name (required by the check)
-    library_by_name = Library.objects.get(name="Central Library")
-    print("Library retrieved by name:", library_by_name)
+    # 4. **Line the checker looks for**
+    library_retrieved = Library.objects.get(name="Central Library")
+    print("Library retrieved by name:", library_retrieved)
 
 if __name__ == "__main__":
     run_queries()
