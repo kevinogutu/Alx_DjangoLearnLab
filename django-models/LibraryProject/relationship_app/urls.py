@@ -6,6 +6,7 @@ from .views import LibraryDetailView  # also import if using the class-based vie
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
+from .views import admin_view, librarian_view, member_view
 
 urlpatterns = [
     path('books/', list_books, name='list_books'),
@@ -21,6 +22,13 @@ urlpatterns = [
 ]
 # relationship_app/urls.py
 
+
+
+urlpatterns = [
+    path('admin-page/', admin_view, name='admin_view'),
+    path('librarian-page/', librarian_view, name='librarian_view'),
+    path('member-page/', member_view, name='member_view'),
+]
 
 
 
