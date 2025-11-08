@@ -48,3 +48,20 @@ class UserProfile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+# relationship_app/models.py
+
+
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    author = models.CharField(max_length=100)
+    published_date = models.DateField()
+
+    class Meta:
+        permissions = [
+            ("can_add_book", "Can add book"),
+            ("can_change_book", "Can edit book"),
+            ("can_delete_book", "Can delete book"),
+        ]
+
+    def __str__(self):
+        return self.title
