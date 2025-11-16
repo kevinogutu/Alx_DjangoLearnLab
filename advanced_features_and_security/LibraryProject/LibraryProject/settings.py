@@ -54,6 +54,22 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
+INSTALLED_APPS += ['csp']
+
+MIDDLEWARE = [
+    # existing middleware...
+    'csp.middleware.CSPMiddleware',
+    # other middleware...
+]
+
+# Conservative CSP — adjust to add CDNs or other domains you trust
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)          # add third-party script hosts if needed
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")  # avoid 'unsafe-inline' if possible
+CSP_IMG_SRC = ("'self'", "data:")
+CSP_FONT_SRC = ("'self'",)
+CSP_CONNECT_SRC = ("'self'",)
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -150,3 +166,17 @@ SECURE_HSTS_PRELOAD = True
 
 # Use secure session serializer (default is fine). Keep SECRET_KEY secret.
 # Use environment variables to store sensitive config in production.
+
+
+# SECURITY: HTTPS enforcement & secure cookies
+# Only enable SECURE_SSL_REDIRECT and HSTS when your site is served over HTTPS (production)
+SECURE_SSL_REDIRECT = True            # redirect all HTTP -> HTTPS
+# If behind a reverse proxy/load balancer (e.g., nginx), use this to tell Django to trust X-Forwarded-Proto:
+# (set this exactly to the header you set in your proxy)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Ensure DEBUG = False in production (do not expose detailed tracebacks)
+DEBUG = False
+
+# IMPORTANT: set ALLOWED_HOSTS to the hostnames / domains used in production
+ALLOWED_HOSTS = ['mydomain.com', 'www.mydomain.com']
