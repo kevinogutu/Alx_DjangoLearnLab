@@ -5,6 +5,9 @@ from .models import Book
 from .forms import BookForm  # simple ModelForm for Book (example below)
 from django.db.models import Q
 from django import forms
+from django.http import HttpResponse
+from .forms import ExampleForm   
+
 
 def book_list(request):
     # listing books - require view permission for more restricted sites (optional)
@@ -59,3 +62,30 @@ def search_books(request):
         # safe: ORM parameterizes under the hood
         books = Book.objects.filter(Q(title__icontains=q) | Q(author__icontains=q))
     return render(request, "bookshelf/search_results.html", {"form": form, "books": books})
+# bookshelf/views.py
+
+
+
+def example_view(request):
+    """
+    Demonstrates safe handling of user input using ExampleForm.
+    This view prevents XSS and SQL injection by relying on Django forms + ORM.
+    """
+    form = ExampleForm(request.GET or None)
+
+    results = []
+    if form.is_valid():
+        q = form.cleaned_data.get('q')
+        limit = form.cleaned_data.get('limit')
+
+        # Safe filtering using Django ORM (no SQL injection)
+        if q:
+            results = Book.objects.filter(title__icontains=q)
+
+        if limit:
+            results = results[:limit]
+
+    return render(request, "bookshelf/example_view.html", {
+        "form": form,
+        "results": results
+    })
