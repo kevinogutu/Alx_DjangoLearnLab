@@ -123,3 +123,30 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# SECURITY: production settings (set via env vars for real deploy)
+import os
+
+DEBUG = False  # MUST be False in production
+
+# Ensure you set ALLOWED_HOSTS to your domain(s) in production
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+
+# Cookies over HTTPS only (in production when you have HTTPS)
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Browser protections
+SECURE_BROWSER_XSS_FILTER = True          # sets X-XSS-Protection header
+SECURE_CONTENT_TYPE_NOSNIFF = True       # sets X-Content-Type-Options: nosniff
+X_FRAME_OPTIONS = 'DENY'                 # prevents clickjacking
+
+# Optional: redirect HTTP to HTTPS
+SECURE_SSL_REDIRECT = True               # enable only if behind HTTPS
+
+# HSTS (HTTP Strict Transport Security) - enable for production
+SECURE_HSTS_SECONDS = 31536000           # 1 year; tune for your deploy
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Use secure session serializer (default is fine). Keep SECRET_KEY secret.
+# Use environment variables to store sensitive config in production.

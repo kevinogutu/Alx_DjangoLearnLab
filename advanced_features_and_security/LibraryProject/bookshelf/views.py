@@ -3,6 +3,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required, login_required
 from .models import Book
 from .forms import BookForm  # simple ModelForm for Book (example below)
+from django.db.models import Q
+from django import forms
 
 def book_list(request):
     # listing books - require view permission for more restricted sites (optional)
@@ -44,3 +46,16 @@ def delete_book(request, pk):
         book.delete()
         return redirect('book_list')
     return render(request, 'bookshelf/book_confirm_delete.html', {'book': book})
+
+
+class SearchForm(forms.Form):
+    q = forms.CharField(max_length=100, required=False)
+
+def search_books(request):
+    form = SearchForm(request.GET)
+    books = Book.objects.none()
+    if form.is_valid():
+        q = form.cleaned_data['q']
+        # safe: ORM parameterizes under the hood
+        books = Book.objects.filter(Q(title__icontains=q) | Q(author__icontains=q))
+    return render(request, "bookshelf/search_results.html", {"form": form, "books": books})
