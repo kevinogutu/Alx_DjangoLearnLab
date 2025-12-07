@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
+tags = TaggableManager(blank=True)
+
 
 class Post(models.Model):
     title = models.CharField(max_length=200)

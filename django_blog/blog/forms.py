@@ -16,18 +16,15 @@ class RegisterForm(UserCreationForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content', 'tags']  # Include 'tags' here
+        fields = ['title', 'content', 'tags']  # include 'tags'
         widgets = {
-            'tags': TagWidget(attrs={'placeholder': 'Add tags separated by commas'}),
+            'tags': TagWidget(attrs={'placeholder': 'Add tags separated by commas'}),  # TagWidget here
         }
 
 # Comment form
 class CommentForm(forms.ModelForm):
     content = forms.CharField(
-        widget=forms.Textarea(attrs={
-            'rows': 3,
-            'placeholder': 'Write your comment here...'
-        }),
+        widget=forms.Textarea(attrs={'rows': 3, 'placeholder': 'Write your comment here...'}),
         max_length=2000,
         label=''
     )
