@@ -1,0 +1,11 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<h2>{{ post.title }}</h2>
+<p><strong>Author:</strong> {{ post.author }}</p>
+<p><strong>Published:</strong> {{ post.published_date }}</p>
+
+<p>{{ post.content }}</p>
+
+<a href="/">← Back to posts</a>
+{% endblock %}
