@@ -1,4 +1,5 @@
 from django.urls import path
+from .models import Post
 from .views import (
     post_list_view,
     post_detail_view,
@@ -18,3 +19,9 @@ urlpatterns = [
     path('register/', register_view, name='register'),
     path('profile/', profile_view, name='profile'),
 ]
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'published_date')
+    search_fields = ('title', 'content')
+    list_filter = ('published_date', 'author')
