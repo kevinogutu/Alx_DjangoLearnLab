@@ -67,50 +67,45 @@ def profile_view(request):
 # List view: available to everyone
 class PostListView(ListView):
     model = Post
-    template_name = 'blog/post_list.html'   # app/templates/blog/post_list.html
+    template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     ordering = ['-published_date']
-    paginate_by = 10  # optional
 
-# Detail view: available to everyone
+
 class PostDetailView(DetailView):
     model = Post
-    template_name = 'blog/post_detail.html'  # app/templates/blog/post_detail.html
-    context_object_name = 'post'
+    template_name = 'blog/post_detail.html'
 
-# Create view: only authenticated users
+
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    form_class = PostForm
-    template_name = 'blog/post_form.html'  # used for both create and update
+    fields = ['title', 'content']
+    template_name = 'blog/post_form.html'
 
     def form_valid(self, form):
-        # automatically set the logged-in user as the author
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-    def get_success_url(self):
-        return reverse('post_detail', kwargs={'pk': self.object.pk})
 
-# Update view: only the author can update
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    form_class = PostForm
+    fields = ['title', 'content']
     template_name = 'blog/post_form.html'
 
-    def get_success_url(self):
-        return reverse('post_detail', kwargs={'pk': self.object.pk})
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
     def test_func(self):
         post = self.get_object()
-        return post.author == self.request.user
+        return self.request.user == post.author
 
-# Delete view: only the author can delete
+
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
+    success_url = reverse_lazy('post-list')
     template_name = 'blog/post_confirm_delete.html'
-    success_url = reverse_lazy('post_list')
 
     def test_func(self):
         post = self.get_object()
-        return post.author == self.request.user
+        return self.request.user == post.author
