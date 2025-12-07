@@ -23,19 +23,13 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('register/', register_view, name='register'),
     path('profile/', profile_view, name='profile'),
-      # List and detail views
+    path('post/new/', views.PostCreateView.as_view(), name='post-create'),
+    path('post/<int:pk>/update/', views.PostUpdateView.as_view(), name='post-update'),
+    path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
+
+    # List & Detail (optional but recommended)
     path('posts/', views.PostListView.as_view(), name='post-list'),
-    path('posts/<int:pk>/', views.PostDetailView.as_view(), name='post-detail'),
-
-    # Create, update, delete — CRUD operations
-    path('posts/new/', views.PostCreateView.as_view(), name='post-create'),
-    path('posts/<int:pk>/update/', views.PostUpdateView.as_view(), name='post-update'),
-    path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
+    path('post/<int:pk>/', views.PostDetailView.as_view(), name='post-detail'),
 ]
-
-
-
-from django.urls import path
-from . import views
 
 
