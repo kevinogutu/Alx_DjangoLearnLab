@@ -30,3 +30,59 @@
   <p><a href="{% url 'post_list' %}">← Back to posts</a></p>
 </article>
 {% endblock %}
+
+{% extends 'blog/base.html' %}
+{% block content %}
+<article class="post-detail">
+  <h2>{{ post.title }}</h2>
+  <p class="meta">By {{ post.author }} • {{ post.published_date|date:"M d, Y H:i" }}</p>
+  <div class="content">{{ post.content|linebreaks }}</div>
+
+  <hr>
+  <section id="comments">
+    <h3>Comments ({{ post.comments.count }})</h3>
+
+    {% if post.comments.all %}
+      <ul class="comments-list">
+      {% for comment in post.comments.all %}
+        <li id="comment-{{ comment.pk }}">
+          <div class="comment-meta">
+            <strong>{{ comment.author }}</strong> • <small>{{ comment.created_at|date:"M d, Y H:i" }}</small>
+            {% if comment.updated_at and comment.updated_at != comment.created_at %}
+                <em>(edited)</em>
+            {% endif %}
+          </div>
+          <div class="comment-body">{{ comment.content|linebreaks }}</div>
+
+          {% if user.is_authenticated and user == comment.author %}
+            <div class="comment-actions">
+              <a href="{% url 'comment-update' post_id=post.pk comment_pk=comment.pk %}">Edit</a> |
+              <a href="{% url 'comment-delete' post_id=post.pk comment_pk=comment.pk %}">Delete</a>
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p>No comments yet. Be the first to comment!</p>
+    {% endif %}
+
+    <hr>
+
+    {% if user.is_authenticated %}
+      <h4>Add a comment</h4>
+      <form method="post" action="{% url 'comment-create' post_id=post.pk %}">
+        {% csrf_token %}
+        {{ comment_form.non_field_errors }}
+        {{ comment_form.content.errors }}
+        {{ comment_form.content }}
+        <div style="margin-top:.5rem;">
+          <button type="submit" class="btn">Post comment</button>
+        </div>
+      </form>
+    {% else %}
+      <p><a href="{% url 'login' %}">Log in</a> to post a comment.</p>
+    {% endif %}
+  </section>
+</article>
+{% endblock %}

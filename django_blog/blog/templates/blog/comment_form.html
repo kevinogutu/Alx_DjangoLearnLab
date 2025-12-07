@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+  <h3>
+    {% if view.action == 'create' %}
+      Add a comment
+    {% else %}
+      Edit comment
+    {% endif %}
+  </h3>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.content.errors }}
+    {{ form.content }}
+    <div style="margin-top:.5rem;">
+      <button type="submit" class="btn">Save</button>
+      <a href="{% url 'post-detail' pk=view.kwargs.post_id %}">Cancel</a>
+    </div>
+  </form>
+{% endblock %}

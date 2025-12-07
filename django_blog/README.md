@@ -36,3 +36,30 @@ Follow the "Testing guidelines" in the project documentation or above.
 ## Notes
 - Ensure `LOGIN_URL`, `LOGIN_REDIRECT_URL`, and `LOGOUT_REDIRECT_URL` are set in settings.py.
 - Use `makemigrations` and `migrate` after changing models.
+# Comments feature — django_blog
+
+## Overview
+- Users can read comments on a post.
+- Authenticated users may create, edit, and delete their own comments.
+
+## Models
+- Comment(post:FK, author:FK, content:Text, created_at, updated_at)
+
+## URLs
+- Create:   /posts/<post_id>/comments/new/       (comment-create)
+- Edit:     /posts/<post_id>/comments/<comment_pk>/edit/   (comment-update)
+- Delete:   /posts/<post_id>/comments/<comment_pk>/delete/ (comment-delete)
+
+Forms use `CommentForm` (ModelForm) and validation is handled by the form/model.
+
+## Permissions
+- Create: logged-in users only
+- Edit/Delete: comment author only
+
+## How to use
+1. Open post detail at /posts/<post_id>/
+2. If logged in, enter a comment in the inline form and submit.
+3. For editing/deleting, click the Edit/Delete links on your own comments.
+
+## Admin
+- Comments can also be viewed and moderated in the Django admin.
