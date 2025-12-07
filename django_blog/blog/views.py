@@ -6,6 +6,8 @@ from django.contrib import messages
 from .forms import RegisterForm
 from django.urls import reverse, reverse_lazy
 from .models import Post, Comment
+from django.db.models import Q
+from taggit.models import Tag
 from .forms import CommentForm
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -177,3 +179,21 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return comment.author == self.request.user
 
 
+def search_posts(request):
+    query = request.GET.get('q', '')
+    results = []
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+    context = {'query': query, 'results': results}
+    return render(request, 'blog/search_results.html', context)
+
+
+
+def posts_by_tag(request, tag_name):
+    posts = Post.objects.filter(tags__name__iexact=tag_name)
+    context = {'tag_name': tag_name, 'posts': posts}
+    return render(request, 'blog/posts_by_tag.html', context)

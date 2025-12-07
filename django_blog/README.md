@@ -63,3 +63,19 @@ Forms use `CommentForm` (ModelForm) and validation is handled by the form/model.
 
 ## Admin
 - Comments can also be viewed and moderated in the Django admin.
+# Tagging & Search Features — django_blog
+
+## Tagging
+- Posts can have multiple tags.
+- Tags are displayed on the post detail page.
+- Clicking a tag shows all posts with that tag.
+
+## Search
+- Search bar available on the site.
+- Search matches title, content, or tags.
+- Results are displayed on a separate search results page.
+
+## How to Use
+1. Add tags when creating or updating a post.
+2. Click tags to filter posts.
+3. Enter keywords or tag names in the search bar to find posts.
