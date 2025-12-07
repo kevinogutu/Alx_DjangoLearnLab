@@ -16,9 +16,9 @@ class RegisterForm(UserCreationForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content', 'tags']  # include 'tags'
+        fields = ['title', 'content', 'tags']  # include tags field
         widgets = {
-            'tags': TagWidget(attrs={'placeholder': 'Add tags separated by commas'}),  # TagWidget here
+            'tags': TagWidget(attrs={'placeholder': 'Add tags separated by commas'}),  # TagWidget() explicitly used
         }
 
 # Comment form
@@ -32,3 +32,4 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['content']
+    
