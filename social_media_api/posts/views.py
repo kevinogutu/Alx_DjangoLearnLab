@@ -45,13 +45,12 @@ class FeedView(generics.ListAPIView):
         following_users = self.request.user.following.all()
         return Post.objects.filter(author__in=following_users).order_by('-created_at')
 
-
 class LikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Post.objects.all()
 
     def post(self, request, pk):
-        post = Post.objects.get(pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
 
         like, created = Like.objects.get_or_create(
             user=request.user,
@@ -83,6 +82,6 @@ class UnlikePostView(generics.GenericAPIView):
     queryset = Post.objects.all()
 
     def post(self, request, pk):
-        post = Post.objects.get(pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
         Like.objects.filter(user=request.user, post=post).delete()
         return Response({"detail": "Post unliked"})
