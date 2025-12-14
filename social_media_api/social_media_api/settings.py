@@ -20,12 +20,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5nr32q&p(bt@__#i2+n*giy!wy(lmfot1nsr2$j7d7xu=vvewa'
+# SECRET_KEY = 'django-insecure-5nr32q&p(bt@__#i2+n*giy!wy(lmfot1nsr2$j7d7xu=vvewa'
+import os
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['your-domain.com', 'www.your-domain.com', 'your-server-ip']
+
 
 
 # Application definition
@@ -128,3 +131,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 AUTH_USER_MODEL = 'accounts.User'
+DEBUG = False
