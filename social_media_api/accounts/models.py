@@ -11,10 +11,10 @@ class User(AbstractUser):
         null=True
     )
 
-    followers = models.ManyToManyField(
+    following = models.ManyToManyField(
         'self',
         symmetrical=False,
-        related_name='following',
+        related_name='followers',
         blank=True
     )
 

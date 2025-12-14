@@ -15,6 +15,7 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+        return f"Post by {self.author}"
 
 
 class Comment(models.Model):
@@ -34,3 +35,5 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.author}"
+
+
